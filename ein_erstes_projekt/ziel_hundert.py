@@ -18,11 +18,15 @@ def zahl_vom_spieler_holen():
     # solange nachfragen bis eine gültige Zahl eingegeben wird
     while i:
         zahl_als_text = input("Wieviel möchten Sie addieren?")
-        zahl = int(zahl_als_text)
-        if zahl < 1 or zahl > 10:
-            print("Bitte eine Zahl von 1-10 eingeben")
+        try:
+            zahl = int(zahl_als_text)
+        except ValueError:
+            print("not a number, Bitte eine Zahl von 1-10 eingeben")
         else:
-            i=False
+            if zahl < 1 or zahl > 10:
+                print("Bitte eine Zahl von 1-10 eingeben")
+            else:
+                i=False
     return zahl
 
 
