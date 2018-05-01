@@ -12,7 +12,6 @@ mw_oh = 17010
 
 def hole_dna_sequenz():
     """Liefere eine vom Nutzer erfragte und validierte DNA-Sequenz.
-
     Um gültig zu sein, darf die Sequenz nur aus den Buchstaben
     A, G, T, C, a, g, t, c bestehen.
     """
@@ -21,34 +20,57 @@ def hole_dna_sequenz():
     # Sequenz vom Nutzer erfragst und die Eingabe validierst.
     # Nur wenn die Validierung klappt, brichst Du die Schleife ab
     # und lieferst die Sequenz zurück.
-    while True:
-        sequence = input('Gib eine DNA-Sequenz ein: ')
-        
-        # Hier fehlt natürlich noch die Validierung.
-        # Dafür brauchst Du noch eine Schleife, in der jeder Buchstabe
-        # der Eingabe auf Gültigkeit geprüft werden muss.
-        # Für einen Anfänger ist das schon eine ordentlich harte Nuss,
-        # die aber mit etwas Anstrengung zu knacken sein sollte.
-
-        if erfolgreiche_validierung:
-            break
-        else:
-            # Dieser Teil wird ausgeführt wenn die Bedingung hinter if
-            # nicht erfüllt war.
-            print()
-            print(
-                'Bei der Eingabe handelt es sich nicht um eine gültige '
-                'DNA-Sequenz!'
-                )
-            print()
-            print()
-        
+    a=True 
+    while a :
+        sequence = input('Gib eine DNA-Sequenz ein: ')        
+        a=False
+        for i in sequence.upper() :
+            if i not in gueltige_nukleotide:
+                print('Bei der Eingabe handelt es sich nicht um eine gültige '
+                'DNA-Sequenz!')
+                a=True
+                break
     return sequence
 
 
 seq = hole_dna_sequenz()
+SEQ = seq.upper()
 # Hier sollten jetzt die nötigen Berechnungen durchgeführt werden.
 
 # Und hier erfolgt dann die Ausgabe.
+
+
+
 print()
-print('Eingelesene Sequenz:')
+
+print('Eingelesene Sequenz: ', SEQ)
+
+print()
+
+print('länge :', len(SEQ) )
+
+print()
+
+print('Base','  ','Häufigkeit')
+print('G','     ', SEQ.count('A'))
+print('C','     ', SEQ.count('C'))
+print('T','     ', SEQ.count('T'))
+print('A','     ', SEQ.count('A'))
+
+print()
+
+print('% GC-Gehalt :',((SEQ.count('C')+SEQ.count('G'))/len(SEQ))*100)
+
+mw_ADN = {'A' : mw_a, 'T' : mw_t, 'C' : mw_c, 'G' : mw_g}
+
+mw = 0
+for k,i in mw_ADN.items() : 
+    mw = mw + SEQ.count(k)*i
+
+mw = (mw+mw_oh)/1000
+
+print()
+
+print('Molekulargewicht : ',mw,'g/mol')
+
+print()
