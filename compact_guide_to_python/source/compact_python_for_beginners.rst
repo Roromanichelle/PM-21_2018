@@ -732,16 +732,45 @@ investigate their content:
    # only if the items in the container support addition in the arithmetic sense
    sum(c)  # the sum of all items in the container
    
-   # built-in functions that accept a container and return an iterator
-   # for use, e.g., in a for loop
-   
-   # return an iterator over (index, item) tuples
-   enumerate(container1, container2, ...)
-   # return an iterator over tuples of zipped elements of all containers, i.e.,
-   # (item1_container1, item1_container2, ...), (item2_container1, ...), ...
+Container types can be used in ``for`` loops to retrieve their elements one by
+one using this simple, general pattern:
 
-**Ordered** containers (strings, lists, tuples, ranges) also support these
-additional operations:
+.. code:: python3
+
+   for item in container:
+       # do something with the item here
+       pass
+       
+There are two built-in functions, ``enumerate()`` and ``zip()``, that return
+specialized iterators over container items, which can also be used in ``for``
+loops:
+
+.. code:: python3
+   
+   # enumerate returns an iterator over (index, item) tuples.
+   # This iterator can be used in a for loop like this:
+   for index, item in enumerate(container):
+       # do something with index and item here
+       pass
+   # if you don't want the index values to start at 0, you can specify a
+   # different start value as the second argument to enumerate
+   for index, item in enumerate(container, 1):
+       # 1-based indexing
+       pass
+           
+   # zip returns an iterator over tuples of zipped elements of all containers
+   # passed to it, i.e., something like this
+   # (item1_container1, item1_container2, ...), (item2_container1, ...), ...
+   # The iterator returns as many tuples as there are elements in the
+   # shortest container.
+   # In a for loop it can be used like this:
+   for container1_item, container2_item in zip(container1, container2):
+       # do something with the zipped items here
+       pass
+
+**Ordered** containers (strings, lists, tuples, ranges), also called
+*sequences*, support all general container operations above, but, in addition,
+offer:
 
 .. code:: python3
 
@@ -749,9 +778,9 @@ additional operations:
    c.count(item)  # return the number of times item occurs in c
    
    # return an iterator over the elements of the container in reversed order
-   reversed(c)
+   reversed(c)  # use e.g. in a for loop
    
-   # concatenation
+   # concatenation (NOT available for ranges)
    c1 + c2  # concatenation of containers of same type
    c * n    # generate a new container by concatenating it n times
    
@@ -1068,10 +1097,14 @@ Use the built-in ``open()`` function to open text files from Python:
    # no undo!!)
    f = open('some_file', 'w') # 'w' for write-access; may raise PermissionError
    
-   # try to open a file named 'some_file' and appending to it
+   # try to open a file named 'some_file' for appending to it
    # => existing old content is preserved (although you will not be able to
    # read it in this mode)
    f = open('some_file', 'a') # 'a' for append; may raise PermissionError
+
+   # try to create a file 'some_file' to be written to
+   # => fails if the file exists already
+   f = open('some_file', 'x') # 'x' for e*x*clusive creation
    
 The ``open()`` function returns a ``file object`` (assigned to ``f`` in the
 examples above) which has methods for reading from or writing to the file.
@@ -1098,7 +1131,8 @@ Other options to read from a file:
 - Use the ``readline()`` method to read the next line from a file
 - Use the ``readlines()`` method to read all lines from a file.
   This method returns a *list* of *strings* (one per line).
-  You can provide the number of lines to read as an argument.
+  You can provide a number of characters to read, then when that number is
+  reached or surpassed at the end of any line, no further lines will be read.
 - Use the ``file object`` in a for loop to retrieve lines one by one, like in:
 
   .. code:: python3
@@ -1107,8 +1141,8 @@ Other options to read from a file:
          if 'PASSWORD' in line:
              print(line)
              
-Files opened in ``'w'`` or ``'a'`` mode have file objects without read methods,
-but with corresponding write methods instead:
+Files opened in ``'w'``, ``'a'`` or ``x`` mode have file objects without read
+methods, but with corresponding write methods instead:
 
 .. code:: python3
 
